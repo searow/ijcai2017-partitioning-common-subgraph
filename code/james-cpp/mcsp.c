@@ -4,6 +4,7 @@
 #include <numeric>
 #include <chrono>
 #include <iostream>
+#include <fstream>
 #include <set>
 #include <string>
 #include <utility>
@@ -18,6 +19,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <boost/filesystem.hpp>
 
 using std::vector;
 using std::cout;
@@ -580,6 +583,40 @@ int main(int argc, char** argv) {
     if (!check_sol(g0, g1, solution))
         fail("*** Error: Invalid solution\n");
 
+    /* Write the results to file .*/
+    // Output directory same as first input file directory.
+    std::string full_path = arguments.filename1;
+    boost::filesystem::path p(full_path);
+    boost::filesystem::path dir = p.parent_path();
+    boost::filesystem::path out_path = dir / "output.csv";
+
+    // Write the results.
+    // Format:
+    // <num of nodes in mcis>>
+    // {<node1_g1>:<node1_g2>, <node2_g1>:<node2_g2>, ...}
+    // <time in ms>
+    std::ofstream myfile;
+    myfile.open(out_path.string());
+    int counter = 0;
+    int size = solution.size();
+    myfile << size << std::endl;
+    myfile << "{";
+    for (int i=0; i<g0.n; i++) {
+        for (unsigned int j=0; j<solution.size(); j++) {
+            if (solution[j].v == i) {
+                myfile << solution[j].v << ":" << solution[j].w;
+                if (counter < size - 1) {
+                    myfile << ",";
+                }
+                counter++;
+            }
+        }
+    }
+    myfile << "}" << std::endl;
+
+    myfile << time_elapsed << endl;
+
+    /*
     cout << "Solution size " << solution.size() << std::endl;
     for (int i=0; i<g0.n; i++)
         for (unsigned int j=0; j<solution.size(); j++)
@@ -589,6 +626,7 @@ int main(int argc, char** argv) {
 
     cout << "Nodes:                      " << nodes << endl;
     cout << "CPU time (ms):              " << time_elapsed << endl;
+    */
     if (aborted)
         cout << "TIMEOUT" << endl;
 }
