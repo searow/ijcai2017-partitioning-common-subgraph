@@ -154,7 +154,7 @@ struct Graph readBinaryGraph(char* filename, bool directed, bool edge_labelled,
     }
     
     for (int i=0; i<nvertices; i++) {
-        int label = (read_word(f) >> (16-k1));
+        int label = (read_word(f));
         if (vertex_labelled)
             g.label[i] |= label;
     }

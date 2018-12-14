@@ -616,7 +616,6 @@ int main(int argc, char** argv) {
 
     myfile << time_elapsed << endl;
 
-    /*
     cout << "Solution size " << solution.size() << std::endl;
     for (int i=0; i<g0.n; i++)
         for (unsigned int j=0; j<solution.size(); j++)
@@ -626,7 +625,6 @@ int main(int argc, char** argv) {
 
     cout << "Nodes:                      " << nodes << endl;
     cout << "CPU time (ms):              " << time_elapsed << endl;
-    */
     if (aborted)
         cout << "TIMEOUT" << endl;
 }
